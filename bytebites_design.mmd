@@ -1,0 +1,30 @@
+classDiagram
+  class Customer {
+    +str name
+    +list~Order~ purchase_history
+    +add_purchase(order: Order) None
+    +is_verified() bool
+  }
+
+  class FoodItem {
+    +str name
+    +float price
+    +str category
+    +float popularity_rating
+  }
+
+  class Menu {
+    +list~FoodItem~ items
+    +add_item(item: FoodItem) None
+    +filter_by_category(category: str) list~FoodItem~
+  }
+
+  class Order {
+    +list~FoodItem~ items
+    +add_item(item: FoodItem) None
+    +compute_total() float
+  }
+
+  Customer "1" --> "*" Order : purchase_history
+  Order "1" --> "*" FoodItem : items
+  Menu "1" --> "*" FoodItem : items
