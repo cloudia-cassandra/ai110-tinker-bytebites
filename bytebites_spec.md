@@ -12,42 +12,7 @@ Finally, when a user picks items, we need to group them into a single transactio
 
 ## Candidate Classes
 
-- Customer
-- FoodItem
-- Menu
-- Order
-
-## Class Diagram
-
-```mermaid
-classDiagram
-  class Customer {
-    +str name
-    +list~Order~ purchase_history
-    +add_purchase(order: Order) None
-    +is_verified() bool
-  }
-
-  class FoodItem {
-    +str name
-    +float price
-    +str category
-    +float popularity_rating
-  }
-
-  class Menu {
-    +list~FoodItem~ items
-    +add_item(item: FoodItem) None
-    +filter_by_category(category: str) list~FoodItem~
-  }
-
-  class Order {
-    +list~FoodItem~ items
-    +add_item(item: FoodItem) None
-    +compute_total() float
-  }
-
-  Customer "1" --> "*" Order : purchase_history
-  Order "1" --> "*" FoodItem : items
-  Menu "1" --> "*" FoodItem : items
-```
+1. Customer — a real user; tracks `name` and `purchase_history` (past orders).
+2. FoodItem — one sellable item; tracks `name`, `price`, `category`, `popularity_rating`.
+3. Menu — the full catalog; holds all `FoodItem`s and can filter by category / sort by popularity.
+4. Order — a single transaction; holds the selected `FoodItem`s and computes the total cost.
