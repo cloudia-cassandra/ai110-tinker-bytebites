@@ -1,0 +1,30 @@
+classDiagram
+  class Customer {
+    -String name
+    -List~Order~ purchaseHistory
+    +addPurchase(Order order) void
+    +isVerified() bool
+  }
+
+  class FoodItem {
+    -String name
+    -float price
+    -String category
+    -float popularityRating
+  }
+
+  class Menu {
+    -List~FoodItem~ items
+    +addItem(FoodItem item) void
+    +filterByCategory(String category) List~FoodItem~
+  }
+
+  class Order {
+    -List~FoodItem~ items
+    +addItem(FoodItem item) void
+    +computeTotal() float
+  }
+
+  Customer --> Order : purchaseHistory
+  Order --> FoodItem : contains
+  Menu --> FoodItem : holds
