@@ -35,8 +35,12 @@ class FoodItem:
     def __init__(
         self, name: str, price: float, category: str, popularity_rating: float
     ) -> None:
+        if price < 0:
+            raise ValueError("Price cannot be negative.")
+        if not 0 <= popularity_rating <= 5:
+            raise ValueError("Popularity rating must be between 0 and 5.")
         self.name = name
-        self.price = price
+        self.price = float(price)
         self.category = category
         self.popularity_rating = popularity_rating
 
@@ -49,11 +53,20 @@ class Menu:
 
     def add_item(self, item: FoodItem) -> None:
         """Add a food item to the menu."""
-        pass
+        self.items.append(item)
 
     def filter_by_category(self, category: str) -> list[FoodItem]:
         """Return the menu items that belong to the given category."""
-        pass
+        return [
+            item for item in self.items
+            if item.category.lower() == category.lower()
+        ]
+
+    def sort_by_popularity(self) -> list[FoodItem]:
+        """Return menu items ordered from most to least popular."""
+        return sorted(
+            self.items, key=lambda item: item.popularity_rating, reverse=True
+        )
 
 
 class Order:
