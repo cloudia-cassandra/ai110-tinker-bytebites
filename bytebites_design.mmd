@@ -18,8 +18,7 @@ Four classes, related by composition (has-a containers), never inheritance (is-a
 
 ### Menu
 - items: list[FoodItem]
-- Methods: add_item(item), calculate_total()
-<!-- filter_by_category(category) list[FoodItem] -->
+- Methods: add_item(item), filter_by_category(category), sort_by_popularity()
 
 ### Order
 - items: list[FoodItem]
@@ -29,6 +28,16 @@ Four classes, related by composition (has-a containers), never inheritance (is-a
 - - `Menu` **contains** `FoodItem` objects (composition).
 - `Order` **contains** `FoodItem` objects (composition).
 - `Customer` **has** a `purchase_history` of `Order` objects (composition).
+
+## Diagram (textual UML)
+
+```
+Customer ───has──▶ Order ───contains──▶ FoodItem ◀──contains─── Menu
+  - name              - items              - name          - items
+  - purchase_history  + add_item()         - price         + add_item()
+  + add_order()       + calculate_total()  - category      + filter_by_category()
+                                           - popularity    + sort_by_popularity()
+```
 
 ## Design notes (things suggested by AI, but rejected)
 <!-- will list here -->
