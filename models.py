@@ -21,12 +21,16 @@ class Customer:
     """A real user, tracked by name and past orders."""
 
     def __init__(self, name: str) -> None:
+        if not name.strip():
+            raise ValueError("Customer name cannot be empty.")
         self.name = name
         self.purchase_history: list[Order] = []
 
     def add_order(self, order: Order) -> None:
         """Record a completed order in this customer's purchase history."""
-        pass
+        if not order.items:
+            raise ValueError("Cannot record an empty order.")
+        self.purchase_history.append(order)
 
 
 class FoodItem:
@@ -77,8 +81,8 @@ class Order:
 
     def add_item(self, item: FoodItem) -> None:
         """Add a food item to this order."""
-        pass
+        self.items.append(item)
 
     def calculate_total(self) -> float:
         """Return the total cost of the items in this order."""
-        pass
+        return round(float(sum(item.price for item in self.items)), 2)
