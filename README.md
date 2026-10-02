@@ -61,7 +61,7 @@ classDiagram
 - Methods: add_item(item), calculate_total()
 
 ## Relationships
-- - `Menu` **contains** `FoodItem` objects (composition).
+- `Menu` **contains** `FoodItem` objects (composition).
 - `Order` **contains** `FoodItem` objects (composition).
 - `Customer` **has** a `purchase_history` of `Order` objects (composition).
 
