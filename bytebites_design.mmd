@@ -1,54 +1,34 @@
-# ByteBites System Design
-Verified UML-style class diagram.
-Four classes, related by composition (has-a containers), never inheritance (is-a).
+%% ByteBites System Design
+%% Four classes, related by composition (has-a containers), never inheritance (is-a).
+%% Design notes are in README.md.
+classDiagram
+  class Customer {
+    +str name
+    +list~Order~ purchase_history
+    +add_order(order: Order) None
+  }
+  %% is_verified() bool is intentionally left out
 
-## Classes
+  class FoodItem {
+    +str name
+    +float price
+    +str category
+    +float popularity_rating
+  }
 
-### Customer
-- name: str
-- purchase_history: list[Order]
-- Methods: add_order(order)
-<!-- is_verified: bool -->
+  class Menu {
+    +list~FoodItem~ items
+    +add_item(item: FoodItem) None
+    +filter_by_category(category: str) list~FoodItem~
+    +sort_by_popularity() list~FoodItem~
+  }
 
-### FoodItem
-- name: str
-- price: float
-- category: str
-- popularity_rating: float
+  class Order {
+    +list~FoodItem~ items
+    +add_item(item: FoodItem) None
+    +calculate_total() float
+  }
 
-### Menu
-- items: list[FoodItem]
-- Methods: add_item(item), filter_by_category(category), sort_by_popularity()
-
-### Order
-- items: list[FoodItem]
-- Methods: add_item(item), calculate_total()
-
-## Relationships
-- - `Menu` **contains** `FoodItem` objects (composition).
-- `Order` **contains** `FoodItem` objects (composition).
-- `Customer` **has** a `purchase_history` of `Order` objects (composition).
-
-## Diagram (textual UML)
-
-```
-Customer ───has──▶ Order ───contains──▶ FoodItem ◀──contains─── Menu
-  - name              - items              - name          - items
-  - purchase_history  + add_item()         - price         + add_item()
-  + add_order()       + calculate_total()  - category      + filter_by_category()
-                                           - popularity    + sort_by_popularity()
-```
-
-## Design notes (things suggested by AI, but rejected)
-
-**1. What did the reference file change in the diagram, and which class or relationship got closer to the spec?**
-The reference file made the diagram follow Python conventions instead of the Copilot draft's Java-style ones: `snake_case` names (`purchase_history`, `add_order`, `filter_by_category`) replaced camelCase, and `str`/`list` replaced `String`/`List`. Its rules ("treat the spec as the source of truth", "only add methods a requirement needs") also brought `Menu` closer to the spec. `calculate_total()` came off `Menu`, and `filter_by_category()` and `sort_by_popularity()` went on, matching "filter by category / sort by popularity" in the spec. Totals now live only on `Order`.
-
-**2. Which scaffold matched the diagram most cleanly, and what did the AI suggest that you removed?**
-`FoodItem` matched most cleanly: four attributes (`name`, `price`, `category`, `popularity_rating`), no methods, exactly as the diagram lists them. The AI suggested `is_verified()` on `Customer` (also in the Copilot draft as `isVerified()`). I left it out because it's commented out in this diagram.
-
-**3. Which method changed the behavior you tested, and why does it belong on that class?**
-`Order.calculate_total()`. It first returned the integer `0` for an empty order instead of `0.0`; wrapping the sum in `float()` and rounding to two decimals fixed that. The tests `test_order_total_is_zero_when_empty` and `test_calculate_total_with_multiple_items` cover this method. It belongs on `Order` because the spec says the transaction object should "store the selected items and compute the total cost". `Order` holds the selected items, while `Menu` holds the whole catalog.
-
-**4. Which test would fail first if the app stopped matching the spec, and what behavior does it protect?**
-`unittest` runs test classes and methods in alphabetical order, so `TestCustomer.test_customer_records_order_history` runs first and would be the first to report a failure. It protects the spec requirement to track customers' "past purchase history": an order saved with `add_order()` must show up in that customer's `purchase_history`.
+  Customer "1" *-- "*" Order : purchase_history
+  Order "1" *-- "*" FoodItem : contains
+  Menu "1" *-- "*" FoodItem : contains
